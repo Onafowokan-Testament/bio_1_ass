@@ -22,7 +22,9 @@ def _parse_title(title: str) -> tuple[str, str, str]:
         protein_name = title.split(" OS=", 1)[0]
 
     if " GN=" in title:
-        function_hint = f"Likely related to gene {title.split(' GN=', 1)[1].split(' ', 1)[0]}."
+        function_hint = (
+            f"Likely related to gene {title.split(' GN=', 1)[1].split(' ', 1)[0]}."
+        )
 
     return protein_name.strip(), organism.strip(), function_hint
 
@@ -50,10 +52,16 @@ def uniprot_lookup(protein_sequence: str, max_hits: int = 5) -> List[dict]:
     for item in data.get("results", []):
         accession = item.get("primaryAccession", "")
         protein_desc = item.get("proteinDescription", {})
-        rec_name = protein_desc.get("recommendedName", {}).get("fullName", {}).get("value", "Unknown protein")
+        rec_name = (
+            protein_desc.get("recommendedName", {})
+            .get("fullName", {})
+            .get("value", "Unknown protein")
+        )
         organism = item.get("organism", {}).get("scientificName", "Unknown organism")
 
-        function_hint = "Function annotation not available in the returned UniProt fields."
+        function_hint = (
+            "Function annotation not available in the returned UniProt fields."
+        )
         comments = item.get("comments", [])
         for comment in comments:
             if comment.get("commentType") == "FUNCTION":

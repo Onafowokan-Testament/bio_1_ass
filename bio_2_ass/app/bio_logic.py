@@ -4,42 +4,97 @@ import re
 from dataclasses import dataclass
 from typing import Dict, List, Optional
 
-
 CODON_TABLE: Dict[str, tuple[str, str, str]] = {
-    "UUU": ("F", "Phe", "Phenylalanine"), "UUC": ("F", "Phe", "Phenylalanine"),
-    "UUA": ("L", "Leu", "Leucine"), "UUG": ("L", "Leu", "Leucine"),
-    "UCU": ("S", "Ser", "Serine"), "UCC": ("S", "Ser", "Serine"), "UCA": ("S", "Ser", "Serine"), "UCG": ("S", "Ser", "Serine"),
-    "UAU": ("Y", "Tyr", "Tyrosine"), "UAC": ("Y", "Tyr", "Tyrosine"),
-    "UAA": ("*", "Stop", "Stop"), "UAG": ("*", "Stop", "Stop"),
-    "UGU": ("C", "Cys", "Cysteine"), "UGC": ("C", "Cys", "Cysteine"),
-    "UGA": ("*", "Stop", "Stop"), "UGG": ("W", "Trp", "Tryptophan"),
-    "CUU": ("L", "Leu", "Leucine"), "CUC": ("L", "Leu", "Leucine"), "CUA": ("L", "Leu", "Leucine"), "CUG": ("L", "Leu", "Leucine"),
-    "CCU": ("P", "Pro", "Proline"), "CCC": ("P", "Pro", "Proline"), "CCA": ("P", "Pro", "Proline"), "CCG": ("P", "Pro", "Proline"),
-    "CAU": ("H", "His", "Histidine"), "CAC": ("H", "His", "Histidine"),
-    "CAA": ("Q", "Gln", "Glutamine"), "CAG": ("Q", "Gln", "Glutamine"),
-    "CGU": ("R", "Arg", "Arginine"), "CGC": ("R", "Arg", "Arginine"), "CGA": ("R", "Arg", "Arginine"), "CGG": ("R", "Arg", "Arginine"),
-    "AUU": ("I", "Ile", "Isoleucine"), "AUC": ("I", "Ile", "Isoleucine"), "AUA": ("I", "Ile", "Isoleucine"),
+    "UUU": ("F", "Phe", "Phenylalanine"),
+    "UUC": ("F", "Phe", "Phenylalanine"),
+    "UUA": ("L", "Leu", "Leucine"),
+    "UUG": ("L", "Leu", "Leucine"),
+    "UCU": ("S", "Ser", "Serine"),
+    "UCC": ("S", "Ser", "Serine"),
+    "UCA": ("S", "Ser", "Serine"),
+    "UCG": ("S", "Ser", "Serine"),
+    "UAU": ("Y", "Tyr", "Tyrosine"),
+    "UAC": ("Y", "Tyr", "Tyrosine"),
+    "UAA": ("*", "Stop", "Stop"),
+    "UAG": ("*", "Stop", "Stop"),
+    "UGU": ("C", "Cys", "Cysteine"),
+    "UGC": ("C", "Cys", "Cysteine"),
+    "UGA": ("*", "Stop", "Stop"),
+    "UGG": ("W", "Trp", "Tryptophan"),
+    "CUU": ("L", "Leu", "Leucine"),
+    "CUC": ("L", "Leu", "Leucine"),
+    "CUA": ("L", "Leu", "Leucine"),
+    "CUG": ("L", "Leu", "Leucine"),
+    "CCU": ("P", "Pro", "Proline"),
+    "CCC": ("P", "Pro", "Proline"),
+    "CCA": ("P", "Pro", "Proline"),
+    "CCG": ("P", "Pro", "Proline"),
+    "CAU": ("H", "His", "Histidine"),
+    "CAC": ("H", "His", "Histidine"),
+    "CAA": ("Q", "Gln", "Glutamine"),
+    "CAG": ("Q", "Gln", "Glutamine"),
+    "CGU": ("R", "Arg", "Arginine"),
+    "CGC": ("R", "Arg", "Arginine"),
+    "CGA": ("R", "Arg", "Arginine"),
+    "CGG": ("R", "Arg", "Arginine"),
+    "AUU": ("I", "Ile", "Isoleucine"),
+    "AUC": ("I", "Ile", "Isoleucine"),
+    "AUA": ("I", "Ile", "Isoleucine"),
     "AUG": ("M", "Met", "Methionine"),
-    "ACU": ("T", "Thr", "Threonine"), "ACC": ("T", "Thr", "Threonine"), "ACA": ("T", "Thr", "Threonine"), "ACG": ("T", "Thr", "Threonine"),
-    "AAU": ("N", "Asn", "Asparagine"), "AAC": ("N", "Asn", "Asparagine"),
-    "AAA": ("K", "Lys", "Lysine"), "AAG": ("K", "Lys", "Lysine"),
-    "AGU": ("S", "Ser", "Serine"), "AGC": ("S", "Ser", "Serine"),
-    "AGA": ("R", "Arg", "Arginine"), "AGG": ("R", "Arg", "Arginine"),
-    "GUU": ("V", "Val", "Valine"), "GUC": ("V", "Val", "Valine"), "GUA": ("V", "Val", "Valine"), "GUG": ("V", "Val", "Valine"),
-    "GCU": ("A", "Ala", "Alanine"), "GCC": ("A", "Ala", "Alanine"), "GCA": ("A", "Ala", "Alanine"), "GCG": ("A", "Ala", "Alanine"),
-    "GAU": ("D", "Asp", "Aspartic acid"), "GAC": ("D", "Asp", "Aspartic acid"),
-    "GAA": ("E", "Glu", "Glutamic acid"), "GAG": ("E", "Glu", "Glutamic acid"),
-    "GGU": ("G", "Gly", "Glycine"), "GGC": ("G", "Gly", "Glycine"), "GGA": ("G", "Gly", "Glycine"), "GGG": ("G", "Gly", "Glycine"),
+    "ACU": ("T", "Thr", "Threonine"),
+    "ACC": ("T", "Thr", "Threonine"),
+    "ACA": ("T", "Thr", "Threonine"),
+    "ACG": ("T", "Thr", "Threonine"),
+    "AAU": ("N", "Asn", "Asparagine"),
+    "AAC": ("N", "Asn", "Asparagine"),
+    "AAA": ("K", "Lys", "Lysine"),
+    "AAG": ("K", "Lys", "Lysine"),
+    "AGU": ("S", "Ser", "Serine"),
+    "AGC": ("S", "Ser", "Serine"),
+    "AGA": ("R", "Arg", "Arginine"),
+    "AGG": ("R", "Arg", "Arginine"),
+    "GUU": ("V", "Val", "Valine"),
+    "GUC": ("V", "Val", "Valine"),
+    "GUA": ("V", "Val", "Valine"),
+    "GUG": ("V", "Val", "Valine"),
+    "GCU": ("A", "Ala", "Alanine"),
+    "GCC": ("A", "Ala", "Alanine"),
+    "GCA": ("A", "Ala", "Alanine"),
+    "GCG": ("A", "Ala", "Alanine"),
+    "GAU": ("D", "Asp", "Aspartic acid"),
+    "GAC": ("D", "Asp", "Aspartic acid"),
+    "GAA": ("E", "Glu", "Glutamic acid"),
+    "GAG": ("E", "Glu", "Glutamic acid"),
+    "GGU": ("G", "Gly", "Glycine"),
+    "GGC": ("G", "Gly", "Glycine"),
+    "GGA": ("G", "Gly", "Glycine"),
+    "GGG": ("G", "Gly", "Glycine"),
 }
 
 DNA_CHARS = set("ACGT")
 RNA_CHARS = set("ACGU")
 
 AA_MASS = {
-    "A": 89.09, "R": 174.2, "N": 132.12, "D": 133.1, "C": 121.15,
-    "Q": 146.15, "E": 147.13, "G": 75.07, "H": 155.16, "I": 131.17,
-    "L": 131.17, "K": 146.19, "M": 149.21, "F": 165.19, "P": 115.13,
-    "S": 105.09, "T": 119.12, "W": 204.23, "Y": 181.19, "V": 117.15,
+    "A": 89.09,
+    "R": 174.2,
+    "N": 132.12,
+    "D": 133.1,
+    "C": 121.15,
+    "Q": 146.15,
+    "E": 147.13,
+    "G": 75.07,
+    "H": 155.16,
+    "I": 131.17,
+    "L": 131.17,
+    "K": 146.19,
+    "M": 149.21,
+    "F": 165.19,
+    "P": 115.13,
+    "S": 105.09,
+    "T": 119.12,
+    "W": 204.23,
+    "Y": 181.19,
+    "V": 117.15,
 }
 
 HYDROPHOBIC = set("AVILMFWY")
@@ -79,7 +134,9 @@ def detect_sequence_type(sequence: str) -> SequenceDetection:
         )
 
     chars = set(sequence)
-    invalid_chars = sorted(c for c in chars if c not in DNA_CHARS and c not in RNA_CHARS)
+    invalid_chars = sorted(
+        c for c in chars if c not in DNA_CHARS and c not in RNA_CHARS
+    )
     if invalid_chars:
         return SequenceDetection(
             seq_type="Invalid",
@@ -115,38 +172,34 @@ def detect_sequence_type(sequence: str) -> SequenceDetection:
     )
 
 
-def transcribe_to_mrna(sequence: str, seq_type: str, dna_strand_type: Optional[str]) -> tuple[str, str]:
+def transcribe_to_mrna(
+    sequence: str, seq_type: str, dna_strand_type: Optional[str]
+) -> tuple[str, str]:
     if seq_type == "RNA":
         mrna = sequence
-        explanation = (
-            "Your input was RNA, so transcription output is the same sequence used as mRNA for translation."
-        )
+        explanation = "Your input was RNA, so transcription output is the same sequence used as mRNA for translation."
         return mrna, explanation
 
     if dna_strand_type not in {"coding", "template"}:
-        raise ValueError("For DNA, choose either Non-template (coding) or Template strand.")
+        raise ValueError(
+            "For DNA, choose either Non-template (coding) or Template strand."
+        )
 
     if dna_strand_type == "coding":
         mrna = sequence.replace("T", "U")
-        explanation = (
-            "You selected the DNA non-template (coding) strand. mRNA is made by replacing T with U while keeping the same base order."
-        )
+        explanation = "You selected the DNA non-template (coding) strand. mRNA is made by replacing T with U while keeping the same base order."
         return mrna, explanation
 
     complements = {"A": "U", "T": "A", "C": "G", "G": "C"}
     mrna = "".join(complements[b] for b in sequence)
-    explanation = (
-        "You selected the DNA template strand. mRNA is created by complementary pairing: A->U, T->A, C->G, and G->C."
-    )
+    explanation = "You selected the DNA template strand. mRNA is created by complementary pairing: A->U, T->A, C->G, and G->C."
     return mrna, explanation
 
 
 def translate_mrna(mrna: str) -> tuple[List[dict], List[dict], str, str]:
     start_index = mrna.find("AUG")
     if start_index == -1:
-        explanation = (
-            "Translation normally starts at AUG. No AUG codon was found, so no protein chain could be formed."
-        )
+        explanation = "Translation normally starts at AUG. No AUG codon was found, so no protein chain could be formed."
         return [], [], "", explanation
 
     codon_rows: List[dict] = []
@@ -160,7 +213,9 @@ def translate_mrna(mrna: str) -> tuple[List[dict], List[dict], str, str]:
 
         aa = CODON_TABLE.get(codon)
         if aa is None:
-            codon_rows.append({"codon": codon, "one": "?", "abbr": "?", "name": "Unknown"})
+            codon_rows.append(
+                {"codon": codon, "one": "?", "abbr": "?", "name": "Unknown"}
+            )
             continue
 
         one, abbr, name = aa

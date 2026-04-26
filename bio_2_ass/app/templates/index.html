@@ -1,115 +1,193 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>DNA & RNA Sequence Analyzer</title>
-  <link rel="stylesheet" href="/static/styles.css" />
-</head>
-<body>
-  <header class="hero">
-    <h1>DNA & RNA Sequence Analyzer</h1>
-    <p>From nucleotide sequence to protein profile, explained in plain language.</p>
-  </header>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>DNA & RNA Sequence Analyzer</title>
+    <link rel="stylesheet" href="/static/styles.css" />
+  </head>
+  <body>
+    <header class="hero">
+      <h1>DNA & RNA Sequence Analyzer</h1>
+      <p>
+        From nucleotide sequence to protein profile, explained in plain
+        language.
+      </p>
+    </header>
 
-  <main class="container">
-    <section class="panel input-panel">
-      <h2>1) Sequence Input</h2>
-      <form action="/analyze" method="post" enctype="multipart/form-data" id="analyzer-form">
-        <label for="sequence_text">Type or paste DNA/RNA sequence</label>
-        <textarea id="sequence_text" name="sequence_text" rows="8" placeholder="Example: ATGGCCATTGTAATGGGCCGCTGAAAGGGTGCCCGATAG">{{ input_sequence }}</textarea>
+    <main class="container">
+      <section class="panel input-panel">
+        <h2>1) Sequence Input</h2>
+        <form
+          action="/analyze"
+          method="post"
+          enctype="multipart/form-data"
+          id="analyzer-form"
+        >
+          <label for="sequence_text">Type or paste DNA/RNA sequence</label>
+          <textarea
+            id="sequence_text"
+            name="sequence_text"
+            rows="8"
+            placeholder="Example: ATGGCCATTGTAATGGGCCGCTGAAAGGGTGCCCGATAG"
+          >
+{{ input_sequence }}</textarea
+          >
 
-        <label for="sequence_file">Upload sequence file (.txt, .fasta)</label>
-        <input type="file" id="sequence_file" name="sequence_file" accept=".txt,.fasta,.fa,.fna" />
+          <label for="sequence_file">Upload sequence file (.txt, .fasta)</label>
+          <input
+            type="file"
+            id="sequence_file"
+            name="sequence_file"
+            accept=".txt,.fasta,.fa,.fna"
+          />
 
-        <div id="drop-zone" class="drop-zone">
-          Drag and drop your sequence file here
-        </div>
+          <div id="drop-zone" class="drop-zone">
+            Drag and drop your sequence file here
+          </div>
 
-        <div id="strand-section" class="strand-section">
-          <p>If sequence is DNA, choose strand type:</p>
-          <label><input type="radio" name="dna_strand_type" value="coding" {% if selected_strand == 'coding' %}checked{% endif %} /> Non-template (coding/sense)</label>
-          <label><input type="radio" name="dna_strand_type" value="template" {% if selected_strand == 'template' %}checked{% endif %} /> Template (antisense)</label>
-        </div>
+          <div id="strand-section" class="strand-section">
+            <p>If sequence is DNA, choose strand type:</p>
+            <label
+              ><input
+                type="radio"
+                name="dna_strand_type"
+                value="coding"
+                {%
+                if
+                selected_strand=""
+                ="coding"
+                %}checked{%
+                endif
+                %}
+              />
+              Non-template (coding/sense)</label
+            >
+            <label
+              ><input
+                type="radio"
+                name="dna_strand_type"
+                value="template"
+                {%
+                if
+                selected_strand=""
+                ="template"
+                %}checked{%
+                endif
+                %}
+              />
+              Template (antisense)</label
+            >
+          </div>
 
-        <button type="submit">Analyze Sequence</button>
-      </form>
-      <p class="small-note">Detected source: {{ sequence_source if sequence_source else 'None yet' }}</p>
-      {% if error %}<p class="error">{{ error }}</p>{% endif %}
-    </section>
+          <button type="submit">Analyze Sequence</button>
+        </form>
+        <p class="small-note">
+          Detected source: {{ sequence_source if sequence_source else 'None yet'
+          }}
+        </p>
+        {% if error %}
+        <p class="error">{{ error }}</p>
+        {% endif %}
+      </section>
 
-    <section class="panel output-panel">
-      <h2>2) Detection</h2>
-      <p><strong>Detected type:</strong> {{ detected_type if detected_type else 'Not analyzed yet' }}</p>
-      <p>{{ detection_explanation }}</p>
+      <section class="panel output-panel">
+        <h2>2) Detection</h2>
+        <p>
+          <strong>Detected type:</strong> {{ detected_type if detected_type else
+          'Not analyzed yet' }}
+        </p>
+        <p>{{ detection_explanation }}</p>
 
-      <h2>3) Transcription</h2>
-      <p><strong>Input sequence:</strong> {{ input_sequence }}</p>
-      <p><strong>mRNA result:</strong> {{ transcribed_mrna }}</p>
-      <p>{{ transcription_explanation }}</p>
+        <h2>3) Transcription</h2>
+        <p><strong>Input sequence:</strong> {{ input_sequence }}</p>
+        <p><strong>mRNA result:</strong> {{ transcribed_mrna }}</p>
+        <p>{{ transcription_explanation }}</p>
 
-      <h2>4) Translation</h2>
-      <p>{{ translation_explanation }}</p>
-      <table>
-        <thead>
-          <tr><th>Codon</th><th>Amino acid (full name)</th><th>Abbrev</th><th>1-letter</th></tr>
-        </thead>
-        <tbody>
-          {% for row in codon_rows %}
+        <h2>4) Translation</h2>
+        <p>{{ translation_explanation }}</p>
+        <table>
+          <thead>
+            <tr>
+              <th>Codon</th>
+              <th>Amino acid (full name)</th>
+              <th>Abbrev</th>
+              <th>1-letter</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for row in codon_rows %}
             <tr>
               <td>{{ row.codon }}</td>
               <td>{{ row.name }}</td>
               <td>{{ row.abbr }}</td>
               <td>{{ row.one }}</td>
             </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+
+        <h2>5) Amino Acids (Polypeptide Chain)</h2>
+        <p>
+          Amino acids are small building blocks. A polypeptide chain is the
+          ordered list of these amino acids, and it later folds into a protein
+          shape.
+        </p>
+        <div class="chain">
+          {% for aa in amino_rows %}
+          <span class="aa-pill"
+            >{{ aa.name }} ({{ aa.abbr }}, {{ aa.one }})</span
+          >
           {% endfor %}
-        </tbody>
-      </table>
+        </div>
 
-      <h2>5) Amino Acids (Polypeptide Chain)</h2>
-      <p>
-        Amino acids are small building blocks. A polypeptide chain is the ordered list of these amino acids,
-        and it later folds into a protein shape.
-      </p>
-      <div class="chain">
-        {% for aa in amino_rows %}
-          <span class="aa-pill">{{ aa.name }} ({{ aa.abbr }}, {{ aa.one }})</span>
-        {% endfor %}
-      </div>
-
-      <h2>6) Protein and Database Lookup</h2>
-      <p><strong>Predicted protein sequence:</strong> {{ protein_sequence }}</p>
-      {% if protein_properties %}
+        <h2>6) Protein and Database Lookup</h2>
+        <p>
+          <strong>Predicted protein sequence:</strong> {{ protein_sequence }}
+        </p>
+        {% if protein_properties %}
         <ul>
           <li>Length: {{ protein_properties.length }}</li>
-          <li>Molecular weight: {{ protein_properties.molecular_weight }} Da</li>
-          <li>Hydrophobic residue ratio: {{ protein_properties.hydrophobic_ratio }}</li>
+          <li>
+            Molecular weight: {{ protein_properties.molecular_weight }} Da
+          </li>
+          <li>
+            Hydrophobic residue ratio: {{ protein_properties.hydrophobic_ratio
+            }}
+          </li>
           <li>Acidic residues (D, E): {{ protein_properties.acidic_count }}</li>
-          <li>Basic residues (K, R, H): {{ protein_properties.basic_count }}</li>
+          <li>
+            Basic residues (K, R, H): {{ protein_properties.basic_count }}
+          </li>
         </ul>
         <p>{{ protein_properties.explanation }}</p>
-      {% endif %}
+        {% endif %}
 
-      <h3>UniProt matches</h3>
-      <p>{{ protein_explanation }}</p>
-      <table>
-        <thead>
-          <tr><th>Protein Name</th><th>Organism</th><th>Likely Function</th><th>Accession</th></tr>
-        </thead>
-        <tbody>
-          {% for hit in protein_hits %}
+        <h3>UniProt matches</h3>
+        <p>{{ protein_explanation }}</p>
+        <table>
+          <thead>
+            <tr>
+              <th>Protein Name</th>
+              <th>Organism</th>
+              <th>Likely Function</th>
+              <th>Accession</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for hit in protein_hits %}
             <tr>
               <td>{{ hit.protein_name }}</td>
               <td>{{ hit.organism }}</td>
               <td>{{ hit.function }}</td>
               <td>{{ hit.accession }}</td>
             </tr>
-          {% endfor %}
-        </tbody>
-      </table>
-    </section>
-  </main>
+            {% endfor %}
+          </tbody>
+        </table>
+      </section>
+    </main>
 
-  <script src="/static/script.js"></script>
-</body>
+    <script src="/static/script.js"></script>
+  </body>
 </html>

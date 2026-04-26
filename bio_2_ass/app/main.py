@@ -67,7 +67,11 @@ async def analyze(
         file_content = raw_bytes.decode("utf-8", errors="ignore")
 
     raw_input = sequence_text if sequence_text.strip() else file_content
-    source = "Text area" if sequence_text.strip() else ("Uploaded file" if file_content.strip() else "")
+    source = (
+        "Text area"
+        if sequence_text.strip()
+        else ("Uploaded file" if file_content.strip() else "")
+    )
 
     cleaned_sequence = extract_sequence(raw_input)
     detection = detect_sequence_type(cleaned_sequence)
@@ -79,7 +83,9 @@ async def analyze(
 
     if detection.seq_type == "Invalid":
         context["error"] = "Please provide a valid DNA or RNA sequence."
-        return templates.TemplateResponse(request=request, name="index.html", context=context)
+        return templates.TemplateResponse(
+            request=request, name="index.html", context=context
+        )
 
     try:
         mrna, transcription_explanation = transcribe_to_mrna(
@@ -89,9 +95,13 @@ async def analyze(
         )
     except ValueError as exc:
         context["error"] = str(exc)
-        return templates.TemplateResponse(request=request, name="index.html", context=context)
+        return templates.TemplateResponse(
+            request=request, name="index.html", context=context
+        )
 
-    codon_rows, amino_rows, protein_sequence, translation_explanation = translate_mrna(mrna)
+    codon_rows, amino_rows, protein_sequence, translation_explanation = translate_mrna(
+        mrna
+    )
     protein_properties = characterize_protein(protein_sequence)
     protein_hits = uniprot_lookup(protein_sequence) if protein_sequence else []
 
@@ -110,4 +120,6 @@ async def analyze(
         else "No UniProt matches were returned right now. This can happen for short sequences or temporary network/API limits."
     )
 
-    return templates.TemplateResponse(request=request, name="index.html", context=context)
+    return templates.TemplateResponse(
+        request=request, name="index.html", context=context
+    )
