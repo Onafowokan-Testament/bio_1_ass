@@ -1,27 +1,31 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Saved Records</title>
-  <link rel="stylesheet" href="/static/styles.css" />
-</head>
-<body>
-  <header class="hero">
-    <h1>Saved Calculation Records</h1>
-    <p>View and manage stored specimen calculations</p>
-  </header>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Saved Records</title>
+    <link rel="stylesheet" href="/static/styles.css" />
+  </head>
+  <body>
+    <header class="hero">
+      <h1>Saved Calculation Records</h1>
+      <p>View and manage stored specimen calculations</p>
+    </header>
 
-  <main class="layout single">
-    <section class="card">
-      <div class="history-actions">
-        <a href="/">Back to Calculator</a>
-        <form action="/history/clear" method="post" onsubmit="return confirm('Delete all records?');">
-          <button type="submit" class="danger">Clear All</button>
-        </form>
-      </div>
+    <main class="layout single">
+      <section class="card">
+        <div class="history-actions">
+          <a href="/">Back to Calculator</a>
+          <form
+            action="/history/clear"
+            method="post"
+            onsubmit="return confirm('Delete all records?');"
+          >
+            <button type="submit" class="danger">Clear All</button>
+          </form>
+        </div>
 
-      {% if records %}
+        {% if records %}
         <div class="table-wrap">
           <table>
             <thead>
@@ -40,30 +44,34 @@
             </thead>
             <tbody>
               {% for r in records %}
-                <tr>
-                  <td>{{ r['id'] }}</td>
-                  <td>{{ r['username'] }}</td>
-                  <td>{{ '%.6f'|format(r['specimen_size_mm']) }}</td>
-                  <td>{{ '%.10f'|format(r['actual_size_mm']) }}</td>
-                  <td>{{ '%.10f'|format(r['actual_size_output']) }}</td>
-                  <td>{{ r['output_unit'] }}</td>
-                  <td>{{ r['microscope_type'] }}</td>
-                  <td>{{ r['image_path'] }}</td>
-                  <td>{{ r['created_at'] }}</td>
-                  <td>
-                    <form action="/history/delete/{{ r['id'] }}" method="post" onsubmit="return confirm('Delete this record?');">
-                      <button type="submit" class="danger">Delete</button>
-                    </form>
-                  </td>
-                </tr>
+              <tr>
+                <td>{{ r['id'] }}</td>
+                <td>{{ r['username'] }}</td>
+                <td>{{ '%.6f'|format(r['specimen_size_mm']) }}</td>
+                <td>{{ '%.10f'|format(r['actual_size_mm']) }}</td>
+                <td>{{ '%.10f'|format(r['actual_size_output']) }}</td>
+                <td>{{ r['output_unit'] }}</td>
+                <td>{{ r['microscope_type'] }}</td>
+                <td>{{ r['image_path'] }}</td>
+                <td>{{ r['created_at'] }}</td>
+                <td>
+                  <form
+                    action="/history/delete/{{ r['id'] }}"
+                    method="post"
+                    onsubmit="return confirm('Delete this record?');"
+                  >
+                    <button type="submit" class="danger">Delete</button>
+                  </form>
+                </td>
+              </tr>
               {% endfor %}
             </tbody>
           </table>
         </div>
-      {% else %}
+        {% else %}
         <p>No records available.</p>
-      {% endif %}
-    </section>
-  </main>
-</body>
+        {% endif %}
+      </section>
+    </main>
+  </body>
 </html>

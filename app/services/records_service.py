@@ -1,6 +1,10 @@
 from pathlib import Path
 
-from app.core.calculator import calculate_real_size, validate_measured_size, validate_username
+from app.core.calculator import (
+    calculate_real_size,
+    validate_measured_size,
+    validate_username,
+)
 from app.db.database import insert_record
 
 

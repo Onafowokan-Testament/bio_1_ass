@@ -36,7 +36,9 @@ def run_calculation_flow() -> None:
     image_path = input("Enter specimen image file path: ").strip()
     measured_text = input("Enter measured specimen size in mm: ").strip()
 
-    microscope_type = choose_from_list("Choose microscope type:", list(MICROSCOPE_FACTORS.keys()))
+    microscope_type = choose_from_list(
+        "Choose microscope type:", list(MICROSCOPE_FACTORS.keys())
+    )
     output_unit = choose_from_list("Choose output unit:", list(UNIT_TO_MM.keys()))
 
     result = run_and_save_calculation(

@@ -1,60 +1,79 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Microscope Specimen Size Calculator</title>
-  <link rel="stylesheet" href="/static/styles.css" />
-</head>
-<body>
-  <header class="hero">
-    <h1>Microscope Specimen Size Calculator</h1>
-    <p>Calculate true specimen size from microscope measurements</p>
-  </header>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Microscope Specimen Size Calculator</title>
+    <link rel="stylesheet" href="/static/styles.css" />
+  </head>
+  <body>
+    <header class="hero">
+      <h1>Microscope Specimen Size Calculator</h1>
+      <p>Calculate true specimen size from microscope measurements</p>
+    </header>
 
-  <main class="layout">
-    <section class="card">
-      <h2>New Calculation</h2>
-      <form action="/calculate" method="post" enctype="multipart/form-data">
-        <label for="username">Username</label>
-        <input id="username" name="username" type="text" required />
+    <main class="layout">
+      <section class="card">
+        <h2>New Calculation</h2>
+        <form action="/calculate" method="post" enctype="multipart/form-data">
+          <label for="username">Username</label>
+          <input id="username" name="username" type="text" required />
 
-        <label for="measured_size_mm">Measured Size (mm)</label>
-        <input id="measured_size_mm" name="measured_size_mm" type="number" step="any" min="0.0000001" required />
+          <label for="measured_size_mm">Measured Size (mm)</label>
+          <input
+            id="measured_size_mm"
+            name="measured_size_mm"
+            type="number"
+            step="any"
+            min="0.0000001"
+            required
+          />
 
-        <label for="microscope_type">Microscope Type</label>
-        <select id="microscope_type" name="microscope_type" required>
-          {% for m in microscopes %}
+          <label for="microscope_type">Microscope Type</label>
+          <select id="microscope_type" name="microscope_type" required>
+            {% for m in microscopes %}
             <option value="{{ m }}">{{ m }}</option>
-          {% endfor %}
-        </select>
+            {% endfor %}
+          </select>
 
-        <label for="output_unit">Output Unit</label>
-        <select id="output_unit" name="output_unit" required>
-          {% for unit in units %}
+          <label for="output_unit">Output Unit</label>
+          <select id="output_unit" name="output_unit" required>
+            {% for unit in units %}
             <option value="{{ unit }}">{{ unit }}</option>
-          {% endfor %}
-        </select>
+            {% endfor %}
+          </select>
 
-        <label for="specimen_image">Specimen Image</label>
-        <input id="specimen_image" name="specimen_image" type="file" accept=".png,.jpg,.jpeg,.bmp,.gif" required />
+          <label for="specimen_image">Specimen Image</label>
+          <input
+            id="specimen_image"
+            name="specimen_image"
+            type="file"
+            accept=".png,.jpg,.jpeg,.bmp,.gif"
+            required
+          />
 
-        <button type="submit">Calculate and Save</button>
-      </form>
-      <p class="link-row"><a href="/history">View Saved Records</a></p>
-    </section>
+          <button type="submit">Calculate and Save</button>
+        </form>
+        <p class="link-row"><a href="/history">View Saved Records</a></p>
+      </section>
 
-    <section class="card">
-      <h2>Result</h2>
-      {% if error %}
+      <section class="card">
+        <h2>Result</h2>
+        {% if error %}
         <p class="error">{{ error }}</p>
-      {% elif result %}
-        <p class="result-main">Real size: <strong>{{ '%.10f'|format(result.real_size_output) }} {{ result.output_unit }}</strong></p>
+        {% elif result %}
+        <p class="result-main">
+          Real size:
+          <strong
+            >{{ '%.10f'|format(result.real_size_output) }} {{ result.output_unit
+            }}</strong
+          >
+        </p>
         <pre>{{ result.breakdown }}</pre>
-      {% else %}
+        {% else %}
         <p>No calculation yet.</p>
-      {% endif %}
-    </section>
-  </main>
-</body>
+        {% endif %}
+      </section>
+    </main>
+  </body>
 </html>

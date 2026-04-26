@@ -33,13 +33,23 @@ class SpecimenCalculatorApp:
         form = ttk.LabelFrame(container, text="Calculation Input", padding=10)
         form.pack(fill=tk.X)
 
-        ttk.Label(form, text="Username:").grid(row=0, column=0, sticky="w", padx=6, pady=6)
-        ttk.Entry(form, textvariable=self.username_var, width=30).grid(row=0, column=1, sticky="we", padx=6, pady=6)
+        ttk.Label(form, text="Username:").grid(
+            row=0, column=0, sticky="w", padx=6, pady=6
+        )
+        ttk.Entry(form, textvariable=self.username_var, width=30).grid(
+            row=0, column=1, sticky="we", padx=6, pady=6
+        )
 
-        ttk.Label(form, text="Measured Size (mm):").grid(row=1, column=0, sticky="w", padx=6, pady=6)
-        ttk.Entry(form, textvariable=self.size_var, width=30).grid(row=1, column=1, sticky="we", padx=6, pady=6)
+        ttk.Label(form, text="Measured Size (mm):").grid(
+            row=1, column=0, sticky="w", padx=6, pady=6
+        )
+        ttk.Entry(form, textvariable=self.size_var, width=30).grid(
+            row=1, column=1, sticky="we", padx=6, pady=6
+        )
 
-        ttk.Label(form, text="Microscope Type:").grid(row=2, column=0, sticky="w", padx=6, pady=6)
+        ttk.Label(form, text="Microscope Type:").grid(
+            row=2, column=0, sticky="w", padx=6, pady=6
+        )
         ttk.Combobox(
             form,
             textvariable=self.microscope_var,
@@ -48,7 +58,9 @@ class SpecimenCalculatorApp:
             width=42,
         ).grid(row=2, column=1, sticky="we", padx=6, pady=6)
 
-        ttk.Label(form, text="Output Unit:").grid(row=3, column=0, sticky="w", padx=6, pady=6)
+        ttk.Label(form, text="Output Unit:").grid(
+            row=3, column=0, sticky="w", padx=6, pady=6
+        )
         ttk.Combobox(
             form,
             textvariable=self.unit_var,
@@ -57,13 +69,19 @@ class SpecimenCalculatorApp:
             width=42,
         ).grid(row=3, column=1, sticky="we", padx=6, pady=6)
 
-        ttk.Label(form, text="Specimen Image:").grid(row=4, column=0, sticky="w", padx=6, pady=6)
-        ttk.Entry(form, textvariable=self.image_path_var, width=48, state="readonly").grid(
-            row=4, column=1, sticky="we", padx=6, pady=6
+        ttk.Label(form, text="Specimen Image:").grid(
+            row=4, column=0, sticky="w", padx=6, pady=6
         )
-        ttk.Button(form, text="Browse", command=self.select_image).grid(row=4, column=2, padx=6, pady=6)
+        ttk.Entry(
+            form, textvariable=self.image_path_var, width=48, state="readonly"
+        ).grid(row=4, column=1, sticky="we", padx=6, pady=6)
+        ttk.Button(form, text="Browse", command=self.select_image).grid(
+            row=4, column=2, padx=6, pady=6
+        )
 
-        ttk.Button(form, text="Calculate & Save", command=self.calculate).grid(row=5, column=1, sticky="e", padx=6, pady=8)
+        ttk.Button(form, text="Calculate & Save", command=self.calculate).grid(
+            row=5, column=1, sticky="e", padx=6, pady=8
+        )
 
         form.columnconfigure(1, weight=1)
 
@@ -96,7 +114,9 @@ class SpecimenCalculatorApp:
             "created_at",
         )
 
-        self.tree = ttk.Treeview(history_frame, columns=columns, show="headings", height=10)
+        self.tree = ttk.Treeview(
+            history_frame, columns=columns, show="headings", height=10
+        )
         for col in columns:
             self.tree.heading(col, text=col)
 
@@ -112,9 +132,15 @@ class SpecimenCalculatorApp:
 
         actions = ttk.Frame(history_frame)
         actions.pack(fill=tk.X, pady=(8, 0))
-        ttk.Button(actions, text="Delete Selected", command=self.delete_selected).pack(side=tk.LEFT)
-        ttk.Button(actions, text="Clear All", command=self.clear_all).pack(side=tk.LEFT, padx=(8, 0))
-        ttk.Button(actions, text="Refresh", command=self.refresh_records).pack(side=tk.LEFT, padx=(8, 0))
+        ttk.Button(actions, text="Delete Selected", command=self.delete_selected).pack(
+            side=tk.LEFT
+        )
+        ttk.Button(actions, text="Clear All", command=self.clear_all).pack(
+            side=tk.LEFT, padx=(8, 0)
+        )
+        ttk.Button(actions, text="Refresh", command=self.refresh_records).pack(
+            side=tk.LEFT, padx=(8, 0)
+        )
 
     def select_image(self) -> None:
         file_path = filedialog.askopenfilename(
