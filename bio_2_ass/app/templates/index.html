@@ -53,7 +53,12 @@
                 type="radio"
                 name="dna_strand_type"
                 value="coding"
-                {% if selected_coding %}checked{% endif %}
+                {%
+                if
+                selected_coding
+                %}checked{%
+                endif
+                %}
               />
               Non-template (coding/sense)</label
             >
@@ -62,7 +67,12 @@
                 type="radio"
                 name="dna_strand_type"
                 value="template"
-                {% if selected_template %}checked{% endif %}
+                {%
+                if
+                selected_template
+                %}checked{%
+                endif
+                %}
               />
               Template (antisense)</label
             >
