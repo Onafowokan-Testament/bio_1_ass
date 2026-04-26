@@ -39,6 +39,8 @@ def _build_default_context() -> dict:
         "protein_explanation": "",
         "error": "",
         "selected_strand": "coding",
+        "selected_coding": True,
+        "selected_template": False,
     }
 
 
@@ -60,6 +62,8 @@ async def analyze(
 ):
     context = _build_default_context()
     context["selected_strand"] = dna_strand_type
+    context["selected_coding"] = dna_strand_type == "coding"
+    context["selected_template"] = dna_strand_type == "template"
 
     file_content = ""
     if sequence_file and sequence_file.filename:
