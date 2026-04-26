@@ -1,0 +1,138 @@
+:root {
+  --bg: #eef2f7;
+  --ink: #112132;
+  --accent: #0f766e;
+  --accent-2: #164e63;
+  --danger: #b91c1c;
+  --panel: #ffffff;
+  --border: #d0d8e1;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: "Segoe UI", Tahoma, sans-serif;
+  color: var(--ink);
+  background: linear-gradient(160deg, #f8fbff 0%, #edf7f6 60%, #ecf0f7 100%);
+}
+
+.hero {
+  text-align: center;
+  padding: 30px 16px 10px;
+}
+
+.hero h1 {
+  margin: 0;
+}
+
+.container {
+  max-width: 1280px;
+  margin: 0 auto 24px;
+  display: grid;
+  grid-template-columns: minmax(320px, 430px) 1fr;
+  gap: 18px;
+  padding: 0 16px;
+}
+
+.panel {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 16px;
+  box-shadow: 0 8px 24px rgba(18, 42, 66, 0.08);
+}
+
+textarea,
+input[type="file"],
+button {
+  width: 100%;
+  margin: 8px 0 14px;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+}
+
+button {
+  border: none;
+  background: var(--accent);
+  color: #fff;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+button:hover {
+  background: var(--accent-2);
+}
+
+.drop-zone {
+  border: 2px dashed #7aa2c6;
+  border-radius: 10px;
+  padding: 18px;
+  text-align: center;
+  margin-bottom: 14px;
+  background: #f6fbff;
+}
+
+.drop-zone.drag-active {
+  background: #dff4ff;
+  border-color: #0a6ea8;
+}
+
+.strand-section {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 10px;
+  margin-bottom: 14px;
+}
+
+.strand-section label {
+  display: block;
+  margin: 6px 0;
+}
+
+.error {
+  color: var(--danger);
+  font-weight: 700;
+}
+
+.small-note {
+  color: #4b647b;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 14px;
+}
+
+th,
+td {
+  border: 1px solid var(--border);
+  padding: 8px;
+  font-size: 0.92rem;
+  text-align: left;
+}
+
+.chain {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+
+.aa-pill {
+  background: #e8f4ef;
+  border: 1px solid #badccf;
+  border-radius: 999px;
+  padding: 6px 10px;
+  font-size: 0.88rem;
+}
+
+@media (max-width: 980px) {
+  .container {
+    grid-template-columns: 1fr;
+  }
+}
